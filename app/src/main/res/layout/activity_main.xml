@@ -7,21 +7,53 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="wgl.example.com.emtask2.MainActivity">
+    tools:context="wgl.example.com.emtask3.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="시스템 정보"
-        android:id="@+id/textView3"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/textView" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout">
+
+        <Spinner
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/keyspin"
+            android:layout_column="6"
+            android:layout_below="@+id/textView"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/s_text"
+            android:textIsSelectable="false"
+            android:singleLine="true"
+            android:layout_alignTop="@+id/keyspin"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:id="@+id/s_bt"
+            android:layout_alignTop="@+id/s_text"
+            android:layout_alignParentEnd="true" />
+    </LinearLayout>
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/infoList"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/linearLayout"
         android:layout_alignParentStart="true" />
 
 </RelativeLayout>
