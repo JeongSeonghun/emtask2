@@ -5,7 +5,7 @@ android {
     buildToolsVersion "24.0.0"
 
     defaultConfig {
-        applicationId "wgl.example.com.emtask2"
+        applicationId "wgl.example.com.emtask4"
         minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
