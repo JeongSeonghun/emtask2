@@ -47,15 +47,19 @@ public class SebcAdapter extends BaseAdapter {
             //xml파일로 레이아웃 객체 생성
             view = inf.inflate(layout, null);
         }
+
         TextView cateTex1= (TextView) view.findViewById(R.id.cate1);//view레이아웃 객체내의 텍스트뷰 id 사용
         TextView cateTex2= (TextView) view.findViewById(R.id.cate2);
         TextView cateTex3= (TextView) view.findViewById(R.id.cate3);
         TextView nameTex= (TextView) view.findViewById(R.id.name);
+        TextView index= (TextView) view.findViewById(R.id.index);
+        //분류1, 분류2, 분류3, 유적지명, 인덱스
 
         cateTex1.setText(al.get(position).getCate1());
         cateTex2.setText(al.get(position).getCate2());
         cateTex3.setText(al.get(position).getCate3());
         nameTex.setText(al.get(position).getName());
+        index.setText(String.valueOf(position+1));
         return view;
     }
 }

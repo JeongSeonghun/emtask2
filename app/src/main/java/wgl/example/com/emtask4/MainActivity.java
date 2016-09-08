@@ -43,6 +43,15 @@ public class MainActivity extends AppCompatActivity {
         //json관련 초반 20개 표시, 총 개수 확인, asynctask 사용
         task = new PhpDown();
         task.execute("http://openapi.seoul.go.kr:8088/63766f77687368753535566668746d/json/SebcHistoricSiteKor/1/20/");
+//api key 63766f77687368753535566668746d
+/*api 요청인자
+KEY         String(필수)  인증키 OpenAPI 에서 발급된 인증키
+TYPE        String(필수)  요청파일타입 xml : xml, xml파일 : xmlf, 엑셀파일 : xls, json파일 : json
+SERVICE     String(필수)  서비스명 SebcHistoricSiteKor
+START_INDEX INTEGER(필수) 요청시작위치 정수 입력 (페이징 시작번호 입니다 : 데이터 행 시작번호)
+END_INDEX   INTEGER(필수) 요청종료위치 정수 입력 (페이징 끝번호 입니다 : 데이터 행 끝번호)
+MAIN_KEY    STRING(선택)  키 문자열
+*/
 
         //목록 클릭. intext활용 주소 및 명칭 보냄
         seList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -112,6 +121,22 @@ public class MainActivity extends AppCompatActivity {
             SebcH sebc_n;
 
             try {
+                /* JSON 출력값
+공통 list_total_count 총 데이터 건수 (정상조회 시 출력됨)
+공통 RESULT.CODE 요청결과 코드
+공통 RESULT.MESSAGE 요청결과 메시지
+1   MAIN_KEY 키
+2   CATE1_NAME 분류1
+3   CATE2_NAME 분류2
+4   CATE3_NAME 분류3
+5   NAME_KOR 명칭
+6   ADD_KOR 주소
+7   ADD_KOR_ROAD 도로명주소
+8   H_KOR_CITY 행정 시
+9   H_KOR_GU 행정 구
+10  H_KOR_DONG 행정 동
+                 */
+
                 JSONObject root = new JSONObject(str);
                 JSONArray ja;
                 //전체 숫자 저장 및 표시
