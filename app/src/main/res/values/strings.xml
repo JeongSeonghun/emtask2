@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">EmTask4</string>
+    <string name="app_name">EmTask5</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
