@@ -2,14 +2,14 @@ package wgl.example.com.googlemappath1;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
+//import android.location.Location;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+//import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,7 +22,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,13 +37,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Button pathBt, resetBt;
     EditText startTxt, stopTxt;
     Marker startMark, stopMark;
-    boolean sMarkAdd=true, eMarkAdd=true;
+    boolean sMarkAdd=true, eMarkAdd=true; //마커 표시 여부
     SupportMapFragment mapfrag;
-    Button test;
-    int rePolyCheck=0;
+    Button listShow;
+    int rePolyCheck=0;  //경로 개수 확인
 
-    Vector<Vector<LatLng>> test2= new Vector();
-    String test3;
+    String list_val="";    //intent전달용 json값
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,33 +86,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 sMarkAdd=true;
                 eMarkAdd=true;
                 rePolyCheck=0;
+                list_val="";
                 startTxt.setText("");
                 stopTxt.setText("");
             }
         });
 
-        test= (Button)findViewById(R.id.test);
-        test.setOnClickListener(new View.OnClickListener(){
+        listShow= (Button)findViewById(R.id.list_show);
+        listShow.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getApplicationContext(), Main2Activity.class);
-                intent.putExtra("test",test3);
+                Intent intent= new Intent(getApplicationContext(), ListActivity.class);
+                intent.putExtra("list",list_val);
                 startActivity(intent);
             }
         });
 
     }
 
-
+    //"lat,lng" 형식 확인
     public boolean pathReadyCk(String wgs84){
         boolean check;
-        String wgs84_x, wgs84_y;
+        //String wgs84_x, wgs84_y;
         int comNum;
         //Double.valueOf()
         if(!wgs84.isEmpty()&&wgs84.contains(",")){
             comNum=wgs84.indexOf(",");
-            wgs84_x=wgs84.substring(0,comNum-1);
-            wgs84_y=wgs84.substring(comNum+1);
+            //wgs84_x=wgs84.substring(0,comNum-1);
+            //wgs84_y=wgs84.substring(comNum+1);
             check=true;
         }else{
             check=false;
@@ -129,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.setOnMarkerClickListener(this);
         map.setOnMapClickListener(this);
 
-        LatLng seul= new LatLng(37.4632016047, 126.9345984302);
+       //LatLng seul= new LatLng(37.4632016047, 126.9345984302);
         LatLng la= new LatLng(34.052, -118.246);
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(la, 10));
 
@@ -137,16 +136,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        /*
         System.out.println("test: "+marker.getId());
         System.out.println("test: "+marker.getSnippet());
         System.out.println("test: "+marker.getTitle());
         System.out.println("test: "+marker.getAlpha());
         System.out.println("test: "+marker.getPosition());
         System.out.println("test: "+marker.getRotation());
+        */
 
         return false;
     }
 
+    //google 서비스
     private class NodeWgs extends AsyncTask<String, Integer,String> {
         @Override
         protected String doInBackground(String... urls) {
@@ -163,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     conn2.setUseCaches(false);
                     // 연결되었음 코드가 리턴되면.
 
-                    if (conn2.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    if (conn2.getResponseCode() == HttpURLConnection.HTTP_OK) {//url주소 사이에 띄어쓰기 존제시 다른코드 반환됨
 
                         BufferedReader br2 = new BufferedReader(new InputStreamReader(conn2.getInputStream()));
                         for (; ; ) {
@@ -172,7 +174,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if (line == null) break;
                             // 저장된 텍스트 라인을 jsonHtml에 붙여넣음
                             jsonHtml.append(line );
-                            //System.out.println("test000 : biuld"+jsonHtml.toString());
                         }
                         br2.close();
                     }
@@ -188,24 +189,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         protected void onPostExecute(String str) {
-            Vector<Node> nodeVec2= new Vector();
+
             Vector<Vector<LatLng>> nodeVec= new Vector<Vector<LatLng>>();
-            String pathCk_s;
+            String pathCk_s;    //경로 데이터 확인
             try {
                 JSONObject gDirectJo = new JSONObject(str);
 
                 pathCk_s=gDirectJo.getString("status");
 
+                //경로 얻기
                 DirectionsJSONParser parser = new DirectionsJSONParser();
-
                 nodeVec=parser.parse(gDirectJo);
-                test2=nodeVec;
-                test3=gDirectJo.toString();
+
+                if(rePolyCheck==0)  //세가지 경로 중 처음 경로만 저장
+                list_val=gDirectJo.toString();
 
                 if(pathCk(pathCk_s))
                     addPolyline(nodeVec);
                 else
-                    Toast.makeText(getApplicationContext(),"지원되지 않아요!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"지원되지 않아요!:"+pathCk_s,Toast.LENGTH_SHORT).show();
 
             } catch (JSONException e) {
 
@@ -215,8 +217,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
+        //경로결과 확인
         public boolean pathCk(String checkStr){
             boolean check;
+            //경로 결과가 없을시 status는 OK가 아닌 다른 값을 보임
             if(checkStr.equals("OK"))
                 check=true;
             else
@@ -231,11 +235,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    //polyline 그리기
     public void addPolyline(Vector<Vector<LatLng>> node){
 
         PolylineOptions poly= new PolylineOptions().geodesic(true);
 
-        int[] polColor={Color.RED, Color.BLUE, Color.YELLOW};
+        int[] polColor={Color.RED, Color.BLUE, Color.YELLOW};//횟수에 따른 경로 색 변경용
 
         for(int i=0; i<node.size(); i++){
             poly.addAll(node.get(i));
@@ -259,18 +264,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapClick(LatLng latLng) {
 
-        if(startTxt.isFocused()){
-            if(sMarkAdd){
+        if(startTxt.isFocused()){   //startTxt 선택시
+            if(sMarkAdd){   //start Marker 존제 여부 확인 후 추가
                 startMark=map.addMarker(new MarkerOptions()
                         .position(latLng)
                         .icon(BitmapDescriptorFactory.defaultMarker(30)));
                 sMarkAdd=false;
-            }else{
+            }else{  //start Marker 위치 변경
                 startMark.setPosition(latLng);
             }
 
+            //start 좌표 표시 "latitude,longitude"
             startTxt.setText(latLng.latitude+","+latLng.longitude);
         }
+
         if(stopTxt.isFocused()){
             if(eMarkAdd){
                 stopMark=map.addMarker(new MarkerOptions()

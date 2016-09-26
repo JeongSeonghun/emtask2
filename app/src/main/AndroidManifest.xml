@@ -22,7 +22,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCc2PqOCbvrNGtDRwINl4X_tiywxt9TDPA" />
 
-        <activity android:name=".Main2Activity" />
+        <activity android:name=".ListActivity" />
     </application>
 
 </manifest>

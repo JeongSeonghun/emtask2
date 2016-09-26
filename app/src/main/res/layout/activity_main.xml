@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="list"
-        android:id="@+id/test"
+        android:id="@+id/list_show"
         android:layout_alignTop="@+id/reset"
         android:layout_toEndOf="@+id/reset"
         android:layout_marginStart="39dp" />

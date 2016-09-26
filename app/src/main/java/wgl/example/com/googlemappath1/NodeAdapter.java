@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
 public class NodeAdapter extends BaseAdapter {
